@@ -8,12 +8,12 @@ import put.io.students.fancylibrary.service.FancyService;
 
 public class ExpenseManager {
 
-	private ExpenseRepository expenseRepository;
+	private IExpenseRepository expenseRepository;
 	private FancyService fancyService;
 
-	public ExpenseManager() {
-		this.expenseRepository = new ExpenseRepository(new FancyDatabase());
-		this.fancyService = new FancyService();
+	public ExpenseManager(ExpenseRepository expenseRepository, FancyService fancyServiceMocked) {
+		this.expenseRepository = expenseRepository;
+		this.fancyService = fancyServiceMocked;
 	}
 
 	public long calculateTotal() {
