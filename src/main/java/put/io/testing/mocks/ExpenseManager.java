@@ -3,6 +3,7 @@ package put.io.testing.mocks;
 import java.net.ConnectException;
 import java.util.List;
 
+import put.io.students.fancylibrary.database.FancyDatabase;
 import put.io.students.fancylibrary.service.FancyService;
 
 public class ExpenseManager {
@@ -11,7 +12,7 @@ public class ExpenseManager {
 	private FancyService fancyService;
 
 	public ExpenseManager() {
-		this.expenseRepository = new ExpenseRepository();
+		this.expenseRepository = new ExpenseRepository(new FancyDatabase());
 		this.fancyService = new FancyService();
 	}
 

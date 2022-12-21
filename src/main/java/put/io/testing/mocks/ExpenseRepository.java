@@ -12,7 +12,7 @@ public class ExpenseRepository implements IExpenseRepository {
 	private List<Expense> expenses;
 	private IFancyDatabase fancyDatabase;
 
-	public ExpenseRepository() {
+	public ExpenseRepository(IFancyDatabase database) {
 		this.fancyDatabase = new FancyDatabase();
 		expenses = new ArrayList<Expense>();
 	}
