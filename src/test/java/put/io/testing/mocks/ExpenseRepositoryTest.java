@@ -3,6 +3,10 @@ package put.io.testing.mocks;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -16,23 +20,35 @@ public class ExpenseRepositoryTest {
 
     @Test
     void loadExpenses() {
-
-
         IFancyDatabase mockDB = mock(IFancyDatabase.class);
         InOrder inOrder = inOrder(mockDB);
 
         when(mockDB.queryAll()).thenReturn(Collections.emptyList());
 
-        ExpenseRepository mockRepository = mock(ExpenseRepository.class);
-        when(mockRepository.loadExpenses()).thenReturn(Collections.emptyList());
+        ExpenseRepository expenseRepository = new ExpenseRepository(mockDB);
 
-        List<Expense> expenses = mockRepository.loadExpenses();
+        expenseRepository.loadExpenses();
 
         inOrder.verify(mockDB, atLeastOnce()).connect();
         inOrder.verify(mockDB, atLeastOnce()).queryAll();
         inOrder.verify(mockDB, atLeastOnce()).close();
 
-        assertTrue(expenses.isEmpty());
+        assertEquals(Collections.emptyList(), expenseRepository.getExpenses());
+    }
 
+    @Test
+    void saveExpenses() {
+        IFancyDatabase mockDB = mock(IFancyDatabase.class);
+
+        ExpenseRepository expenseRepository = new ExpenseRepository(mockDB);
+        expenseRepository.addExpense(new Expense());
+        expenseRepository.addExpense(new Expense());
+        expenseRepository.addExpense(new Expense());
+        expenseRepository.addExpense(new Expense());
+        expenseRepository.addExpense(new Expense());
+
+        expenseRepository.saveExpenses();
+
+        verify(mockDB, times(5)).persist(any(Expense.class));
     }
 }

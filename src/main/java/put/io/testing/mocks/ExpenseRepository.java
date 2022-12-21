@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import put.io.students.fancylibrary.database.FancyDatabase;
+
 import put.io.students.fancylibrary.database.IFancyDatabase;
 
 public class ExpenseRepository implements IExpenseRepository {
@@ -13,7 +13,7 @@ public class ExpenseRepository implements IExpenseRepository {
 	private IFancyDatabase fancyDatabase;
 
 	public ExpenseRepository(IFancyDatabase database) {
-		this.fancyDatabase = new FancyDatabase();
+		this.fancyDatabase = database;
 		expenses = new ArrayList<Expense>();
 	}
 
@@ -50,6 +50,8 @@ public class ExpenseRepository implements IExpenseRepository {
 		fancyDatabase.connect();
 
 		expenses = new ArrayList<Expense>(fancyDatabase.<Expense>queryAll());
+
+		fancyDatabase.close();
 		return null;
 	}
 
@@ -57,11 +59,8 @@ public class ExpenseRepository implements IExpenseRepository {
 	public void saveExpenses() {
 		fancyDatabase.connect();
 
-		int i = 1;
 		for (Expense expense : expenses) {
 			fancyDatabase.persist(expense);
-			if (i++ % 2 == 0)
-				fancyDatabase.persist(expense);
 		}
 
 		fancyDatabase.close();
