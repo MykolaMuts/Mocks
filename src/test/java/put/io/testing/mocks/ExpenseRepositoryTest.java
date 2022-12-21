@@ -17,15 +17,20 @@ public class ExpenseRepositoryTest {
     @Test
     void loadExpenses() {
 
+
         IFancyDatabase mockDB = mock(IFancyDatabase.class);
         InOrder inOrder = inOrder(mockDB);
 
         when(mockDB.queryAll()).thenReturn(Collections.emptyList());
 
         ExpenseRepository mockRepository = mock(ExpenseRepository.class);
-        when(mockRepository.getExpenses()).thenReturn(Collections.emptyList());
+        when(mockRepository.loadExpenses()).thenReturn(Collections.emptyList());
 
         List<Expense> expenses = mockRepository.loadExpenses();
+
+        inOrder.verify(mockDB, atLeastOnce()).connect();
+        inOrder.verify(mockDB, atLeastOnce()).queryAll();
+        inOrder.verify(mockDB, atLeastOnce()).close();
 
         assertTrue(expenses.isEmpty());
 
